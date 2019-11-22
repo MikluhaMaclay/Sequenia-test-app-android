@@ -12,6 +12,7 @@ import com.example.myapplication.mvp.models.MovieListModel;
 
 import com.arellomobile.mvp.MvpPresenter;
 import com.example.myapplication.mvp.views.MovieListView;
+import com.example.myapplication.wrappers.CheckableGenre;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,7 +23,8 @@ import java.util.List;
 public class MovieListPresenter extends MvpPresenter<MovieListView> {
 
     private MovieListModel movieListModel;
-    public List<Genre> genres;
+//    public List<Genre> genres;
+    public List<CheckableGenre> genres;
     public List<Movie> movies;
     public Genre selectedGenre;
 
@@ -75,14 +77,20 @@ public class MovieListPresenter extends MvpPresenter<MovieListView> {
                 }
             }
         }
+        List<CheckableGenre> checkableGenreList = new ArrayList<>();
 
-        this.genres = genreList;
+        for (Genre genre: genreList
+             ) {
+            checkableGenreList.add(new CheckableGenre(genre));
+        }
+
+        this.genres = checkableGenreList;
         this.movies = movies;
 
         prepareContent(genres, movies);
     }
 
-    private void prepareContent(List<Genre> genres, List<Movie> movies) {
+    private void prepareContent(List<CheckableGenre> genres, List<Movie> movies) {
         List<Object> content = new ArrayList<>();
         content.add(new Header(App.getContext().getString(R.string.genres)));
         content.addAll(genres);
@@ -101,29 +109,31 @@ public class MovieListPresenter extends MvpPresenter<MovieListView> {
         getViewState().showContent(content);
     }
 
-    public void onGenreClick(Genre genre) {
-        String genreName = genre.getName();
+    public void onGenreClick(CheckableGenre genre) {
 
+        List<String> checkedGenres = new ArrayList<>();
 
-        if (selectedGenre != null && selectedGenre == genre) {
-            selectedGenre = null;
-            getViewState().setSelectedGenre(selectedGenre);
-
-            prepareContent(genres, movies);
-            return;
+        for (CheckableGenre genre1: genres) {
+            if(genre1 == genre) {
+                genre1.setChecked(!genre1.isChecked());
+            }
+            if(genre1.isChecked() == true) {
+                checkedGenres.add(genre1.getItem().getName());
+            }
         }
+
+
 
         List<Movie> filteredMovies = new ArrayList<>();
         for (Movie movie : movies
         ) {
             List<String> movieGenres = movie.getGenres();
 
-            if (movieGenres.contains(genreName)) {
+            if (movieGenres.containsAll(checkedGenres)) {
                 filteredMovies.add(movie);
             }
         }
-        selectedGenre = genre;
-        getViewState().setSelectedGenre(selectedGenre);
+//        getViewState().setSelectedGenre(selectedGenre);
         prepareContent(genres, filteredMovies);
     }
 

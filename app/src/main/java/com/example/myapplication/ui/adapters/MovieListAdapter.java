@@ -14,6 +14,7 @@ import com.example.myapplication.entities.Movie;
 import com.example.myapplication.ui.view_holders.GenreViewHolder;
 import com.example.myapplication.ui.view_holders.HeaderViewHolder;
 import com.example.myapplication.ui.view_holders.MovieViewHolder;
+import com.example.myapplication.wrappers.CheckableGenre;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,7 +73,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         (Movie) item, movieViewHolderListener);
                 break;
             case GENRE_TYPE:
-                ((GenreViewHolder) holder).bind((Genre) item, genreViewHolderListener, selectedGenre);
+                ((GenreViewHolder) holder).bind((CheckableGenre) item, genreViewHolderListener);
                 break;
             case HEADER_TYPE:
                 ((HeaderViewHolder) holder).bind((Header) item);
@@ -87,7 +88,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             return MOVIE_TYPE;
         }
 
-        if (item instanceof Genre) {
+        if (item instanceof CheckableGenre) {
             return GENRE_TYPE;
         }
 
@@ -106,8 +107,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         notifyDataSetChanged();
     }
 
-    public void setSelectedGenre(Genre genre) {
-        this.selectedGenre = genre;
+    public void setSelectedGenre(CheckableGenre genre) {
         notifyDataSetChanged();
     }
 

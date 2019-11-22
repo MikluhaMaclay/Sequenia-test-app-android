@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements AppBarProvider, A
     private void initToolbar() {
         appBarProviderImp = new AppBarProviderImp(this);
         setSupportActionBar(appBarProviderImp.getToolbar());
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
+//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
 
         toolbar.setNavigationOnClickListener(view -> onBackPressed());
     }

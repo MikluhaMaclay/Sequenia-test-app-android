@@ -29,6 +29,7 @@ import com.example.myapplication.mvp.views.MovieListView;
 import com.example.myapplication.ui.adapters.MovieListAdapter;
 import com.example.myapplication.ui.view_holders.GenreViewHolder;
 import com.example.myapplication.ui.view_holders.MovieViewHolder;
+import com.example.myapplication.wrappers.CheckableGenre;
 import com.google.android.material.snackbar.Snackbar;
 import com.sequenia.app_bar_provider.AppBarProvider;
 import com.sequenia.app_bar_provider.AppBarSettings;
@@ -99,7 +100,7 @@ public class MovieListFragment extends MvpAppCompatFragment implements MovieList
     }
 
     @Override
-    public void onGenreClick(Genre genre) {
+    public void onGenreClick(CheckableGenre genre) {
         presenter.onGenreClick(genre);
 
     }
@@ -154,7 +155,7 @@ public class MovieListFragment extends MvpAppCompatFragment implements MovieList
     }
 
     @Override
-    public void setSelectedGenre(Genre genre) {
+    public void setSelectedGenre(CheckableGenre genre) {
         adapter.setSelectedGenre(genre);
     }
 
