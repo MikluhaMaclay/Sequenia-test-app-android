@@ -20,6 +20,11 @@ public class Genre {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(getName());
+    }
+
+    @Override
     public boolean equals(Object o) {
 
         if (o instanceof String) {
@@ -31,10 +36,5 @@ public class Genre {
 
         Genre genre = (Genre) o;
         return Objects.equals(getName(), genre.getName());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getName());
     }
 }

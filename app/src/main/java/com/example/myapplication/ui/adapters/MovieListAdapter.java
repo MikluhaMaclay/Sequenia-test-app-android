@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.application.App;
-import com.example.myapplication.entities.Genre;
 import com.example.myapplication.entities.Header;
 import com.example.myapplication.entities.Movie;
 import com.example.myapplication.ui.view_holders.GenreViewHolder;
@@ -17,20 +16,14 @@ import com.example.myapplication.ui.view_holders.MovieViewHolder;
 import com.example.myapplication.wrappers.CheckableGenre;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 
 public class MovieListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<Object> mContent;
-    protected LayoutInflater inflater;
-
-
     private static final int MOVIE_TYPE = 0;
     private static final int GENRE_TYPE = 1;
     private static final int HEADER_TYPE = 2;
-    private Genre selectedGenre;
-
+    private LayoutInflater inflater;
+    private List<Object> mContent;
     private GenreViewHolder.GenreViewHolderListener genreViewHolderListener;
     private MovieViewHolder.MovieViewHolderListener movieViewHolderListener;
 
@@ -59,18 +52,15 @@ public class MovieListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             case HEADER_TYPE:
                 return new HeaderViewHolder(inflater, viewGroup);
         }
-
-        throw new Error("aaa");
+        throw new Error("View holder type does not exist");
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder,
-                                 int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Object item = mContent.get(position);
         switch (holder.getItemViewType()) {
             case MOVIE_TYPE:
-                ((MovieViewHolder) holder).bind(
-                        (Movie) item, movieViewHolderListener);
+                ((MovieViewHolder) holder).bind((Movie) item, movieViewHolderListener);
                 break;
             case GENRE_TYPE:
                 ((GenreViewHolder) holder).bind((CheckableGenre) item, genreViewHolderListener);
@@ -96,7 +86,12 @@ public class MovieListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             return HEADER_TYPE;
         }
 
-        return 10;
+        return -1;
+    }
+
+    @Override
+    public int getItemCount() {
+        return mContent != null ? mContent.size() : 0;
     }
 
     public void setItems(List<Object> items) {
@@ -109,10 +104,5 @@ public class MovieListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public void setSelectedGenre(CheckableGenre genre) {
         notifyDataSetChanged();
-    }
-
-    @Override
-    public int getItemCount() {
-        return mContent != null ? mContent.size() : 0;
     }
 }

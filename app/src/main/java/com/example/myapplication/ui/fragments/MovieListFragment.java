@@ -6,12 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,7 +19,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.example.myapplication.R;
 import com.example.myapplication.application.App;
-import com.example.myapplication.entities.Genre;
 import com.example.myapplication.entities.Movie;
 import com.example.myapplication.mvp.models.MovieListModelProd;
 import com.example.myapplication.mvp.presenters.MovieListPresenter;
@@ -38,19 +35,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MovieListFragment extends MvpAppCompatFragment implements MovieListView,
-        GenreViewHolder.GenreViewHolderListener,
-        MovieViewHolder.MovieViewHolderListener, AppBarSettings {
+        GenreViewHolder.GenreViewHolderListener, MovieViewHolder.MovieViewHolderListener,
+        AppBarSettings {
 
     @InjectPresenter
     MovieListPresenter presenter;
-    MovieListAdapter adapter;
+    private MovieListAdapter adapter;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private LinearLayout loader;
-    private LinearLayout tryAgain;
+    private View loader;
+    private View tryAgain;
     private Button tryAgainButton;
     private AppBarProvider appBarProvider;
-
 
     @ProvidePresenter
     MovieListPresenter provideMovieListPresenter() {
@@ -58,7 +54,6 @@ public class MovieListFragment extends MvpAppCompatFragment implements MovieList
         presenter.setMovieListModel(new MovieListModelProd());
         return presenter;
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -70,11 +65,15 @@ public class MovieListFragment extends MvpAppCompatFragment implements MovieList
         }
     }
 
-
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.movie_list, container, false);
+    }
 
-        View view = inflater.inflate(R.layout.movie_list, container, false);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         initAdapter(view);
         loader = view.findViewById(R.id.loader);
         tryAgain = view.findViewById(R.id.try_again);
@@ -83,9 +82,7 @@ public class MovieListFragment extends MvpAppCompatFragment implements MovieList
         appBarProvider.setAppBarSettings(this);
         ((TextView) appBarProvider.setCustomToolbarView(R.layout.movie_title_toolbar))
                 .setText(App.getContext().getString(R.string.app_name));
-        return view;
     }
-
 
     private void initAdapter(View view) {
         List<Object> list = new ArrayList<>();
@@ -107,19 +104,10 @@ public class MovieListFragment extends MvpAppCompatFragment implements MovieList
 
     @Override
     public void onMovieClick(View view, Movie movie) {
-        presenter.onMovieClick(view, movie);
-
         Bundle bundle = new Bundle();
         bundle.putParcelable("movie", movie);
 
         Navigation.findNavController(view).navigate(R.id.detailsFragment, bundle);
-
-    }
-
-    @Override
-    public void showErrorToast(String message) {
-        Snackbar snackbar = Snackbar.make(getView(), message, Snackbar.LENGTH_LONG);
-        snackbar.show();
     }
 
     @Override
@@ -128,15 +116,6 @@ public class MovieListFragment extends MvpAppCompatFragment implements MovieList
             loader.setVisibility(View.VISIBLE);
         } else {
             loader.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void setTryAgain(boolean state) {
-        if(state) {
-            tryAgain.setVisibility(View.VISIBLE);
-        } else {
-            tryAgain.setVisibility(View.GONE);
         }
     }
 
@@ -150,6 +129,15 @@ public class MovieListFragment extends MvpAppCompatFragment implements MovieList
     }
 
     @Override
+    public void showErrorToast(String message) {
+        View view = getView();
+        if(view != null) {
+            Snackbar snackbar = Snackbar.make(getView(), message, Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
+    }
+
+    @Override
     public void showContent(List<Object> content) {
         adapter.setItems(content);
     }
@@ -159,5 +147,12 @@ public class MovieListFragment extends MvpAppCompatFragment implements MovieList
         adapter.setSelectedGenre(genre);
     }
 
-
+    @Override
+    public void setTryAgain(boolean state) {
+        if (state) {
+            tryAgain.setVisibility(View.VISIBLE);
+        } else {
+            tryAgain.setVisibility(View.GONE);
+        }
+    }
 }

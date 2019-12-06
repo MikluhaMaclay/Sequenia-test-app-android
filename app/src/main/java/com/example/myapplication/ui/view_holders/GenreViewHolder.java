@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.application.App;
-import com.example.myapplication.entities.Genre;
 import com.example.myapplication.wrappers.CheckableGenre;
 
 public class GenreViewHolder extends RecyclerView.ViewHolder {
@@ -23,10 +22,6 @@ public class GenreViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(final CheckableGenre genre, final GenreViewHolderListener listener) {
-        if (listener == null) {
-            return;
-        }
-
         if (genre.isChecked()) {
             itemView.setBackgroundResource(R.color.colorPrimary);
             genreTitle.setTextColor(App.getContext().getColor(R.color.white));
@@ -37,11 +32,9 @@ public class GenreViewHolder extends RecyclerView.ViewHolder {
 
         genreTitle.setText(genre.getItem().getDisplayName());
         itemView.setOnClickListener((View v) -> listener.onGenreClick(genre));
-
     }
 
     public interface GenreViewHolderListener {
         void onGenreClick(CheckableGenre genre);
     }
-
 }

@@ -11,7 +11,6 @@ public interface MovieListModel {
     interface MoviesCallback {
         void onResponse(List<Movie> items);
 
-
         void onFailure(String error);
     }
 }

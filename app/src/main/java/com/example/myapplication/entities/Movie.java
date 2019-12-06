@@ -3,13 +3,24 @@ package com.example.myapplication.entities;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.List;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Movie implements Parcelable {
 
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel source) {
+            return new Movie(source);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
     @SerializedName("id")
     @Expose
     private int id;
@@ -34,6 +45,20 @@ public class Movie implements Parcelable {
     @SerializedName("genres")
     @Expose
     private List<String> genres = null;
+
+    public Movie() {
+    }
+
+    protected Movie(Parcel in) {
+        this.id = in.readInt();
+        this.localizedName = in.readString();
+        this.name = in.readString();
+        this.year = in.readString();
+        this.rating = in.readString();
+        this.imageUrl = in.readString();
+        this.description = in.readString();
+        this.genres = in.createStringArrayList();
+    }
 
     public int getId() {
         return id;
@@ -99,7 +124,6 @@ public class Movie implements Parcelable {
         this.genres = genres;
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -116,34 +140,4 @@ public class Movie implements Parcelable {
         dest.writeString(this.description);
         dest.writeStringList(this.genres);
     }
-
-    public Movie() {
-    }
-
-    protected Movie(Parcel in) {
-        this.id = in.readInt();
-        this.localizedName = in.readString();
-        this.name = in.readString();
-        this.year = in.readString();
-        this.rating = in.readString();
-        this.imageUrl = in.readString();
-        this.description = in.readString();
-        this.genres = in.createStringArrayList();
-    }
-
-    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
-        @Override
-        public Movie createFromParcel(Parcel source) {
-            return new Movie(source);
-        }
-
-        @Override
-        public Movie[] newArray(int size) {
-            return new Movie[size];
-        }
-    };
-
-//    public int compareTo(Movie mv) {
-//        return(getLocalizedName().compareTo(mv.getLocalizedName()));
-//    }
 }

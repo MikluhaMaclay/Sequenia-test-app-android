@@ -15,12 +15,12 @@ public class CheckableGenre {
         this.genre = new Genre(genre);
     }
 
-    public void setChecked(boolean checked) {
-        isChecked = checked;
-    }
-
     public boolean isChecked() {
         return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 
     public Genre getItem() {

@@ -1,15 +1,5 @@
 <resources>
     <string name="app_name">Movie list</string>
-    <string name="error_unspecified">Unspecified error</string>
-    <string name="error_internal_server">Internal server error</string>
-    <string name="error_bad_request">Bad request</string>
-    <string name="error_unauthorized">Unaothorized</string>
-    <string name="error_forbidden">Forbidden</string>
-    <string name="error_server_unavailable">Unavailable</string>
-    <string name="error_unknown">Unknown error</string>
-    <string name="error_data_parsing">Data parsing error</string>
-    <string name="error_slow_internet_connection">Slow internet connection</string>
-    <string name="error_no_internet_connection">No internet connection</string>
     <string name="genres">Жанры</string>
     <string name="films">Фильмы</string>
     <string name="Loading">Загрузка...</string>

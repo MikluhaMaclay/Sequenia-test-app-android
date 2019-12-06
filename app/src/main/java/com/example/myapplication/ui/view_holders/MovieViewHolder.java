@@ -25,14 +25,10 @@ public class MovieViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(final Movie movie, final MovieViewHolderListener listener) {
-        if (listener == null) {
-            return;
-        }
         movieTitle.setText(movie.getLocalizedName());
         Picasso.get().load(movie.getImageUrl()).into(movieImage);
 
         itemView.setOnClickListener((View v) -> listener.onMovieClick(v, movie));
-
     }
 
     public interface MovieViewHolderListener {

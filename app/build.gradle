@@ -10,7 +10,6 @@ android {
         versionCode 2
         versionName "1.0"
         buildConfigField "String", "SERVER_URL", '"https://s3-eu-west-1.amazonaws.com/sequeniatesttask/"'
-
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -48,16 +47,9 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'jp.wasabeef:picasso-transformations:2.2.1'
 
-//    implementation "com.arello-mobile:moxy:1.5.5"
-//    implementation "com.arello-mobile:moxy-app-compat:1.5.5"
-//    implementation 'com.arello-mobile:moxy-android:1.5.5'
-//    annotationProcessor 'com.arello-mobile:moxy-compiler:1.5.5'
-
     implementation "tech.schoolhelper:moxy-x:1.7.0"
     implementation "tech.schoolhelper:moxy-x-androidx:1.7.0"
-//    implementation 'tech.schoolhelper:moxy-x-app-compat:1.7.0'
     annotationProcessor "tech.schoolhelper:moxy-x-compiler:1.7.0"
-
 
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.android.support:support-annotations:28.0.0'

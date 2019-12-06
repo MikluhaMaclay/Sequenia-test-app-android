@@ -1,16 +1,13 @@
 package com.example.myapplication.mvp.presenters;
 
-import android.view.View;
-
 import com.arellomobile.mvp.InjectViewState;
+import com.arellomobile.mvp.MvpPresenter;
 import com.example.myapplication.R;
 import com.example.myapplication.application.App;
 import com.example.myapplication.entities.Genre;
 import com.example.myapplication.entities.Header;
 import com.example.myapplication.entities.Movie;
 import com.example.myapplication.mvp.models.MovieListModel;
-
-import com.arellomobile.mvp.MvpPresenter;
 import com.example.myapplication.mvp.views.MovieListView;
 import com.example.myapplication.wrappers.CheckableGenre;
 
@@ -23,11 +20,8 @@ import java.util.List;
 public class MovieListPresenter extends MvpPresenter<MovieListView> {
 
     private MovieListModel movieListModel;
-//    public List<Genre> genres;
-    public List<CheckableGenre> genres;
-    public List<Movie> movies;
-    public Genre selectedGenre;
-
+    private List<CheckableGenre> genres;
+    private List<Movie> movies;
 
     public void setMovieListModel(MovieListModel movieListModel) {
         this.movieListModel = movieListModel;
@@ -44,33 +38,27 @@ public class MovieListPresenter extends MvpPresenter<MovieListView> {
         getViewState().setLoader(true);
         getViewState().setContentVisibility(false);
         getViewState().setTryAgain(false);
-        movieListModel.getMovies(
-                new MovieListModel.MoviesCallback() {
-                    @Override
-                    public void onResponse(List<Movie> movies) {
-                        onMoviesLoadSuccess(movies);
-                    }
+        movieListModel.getMovies(new MovieListModel.MoviesCallback() {
+            @Override
+            public void onResponse(List<Movie> movies) {
+                onMoviesLoadSuccess(movies);
+            }
 
-                    @Override
-                    public void onFailure(String error) {
-                        onLoadApplicationsError(error);
-                    }
-                }
-        );
+            @Override
+            public void onFailure(String error) {
+                onLoadApplicationsError(error);
+            }
+        });
     }
-
-    ;
 
     private void onMoviesLoadSuccess(List<Movie> movies) {
         getViewState().setLoader(false);
         getViewState().setContentVisibility(true);
 
         List<Genre> genreList = new ArrayList<>();
-        for (Movie movie : movies
-        ) {
+        for (Movie movie : movies) {
             List<String> genres = movie.getGenres();
-            for (String genre : genres
-            ) {
+            for (String genre : genres) {
                 Genre genre2 = new Genre(genre);
                 if (!genreList.contains(genre2)) {
                     genreList.add(genre2);
@@ -79,8 +67,7 @@ public class MovieListPresenter extends MvpPresenter<MovieListView> {
         }
         List<CheckableGenre> checkableGenreList = new ArrayList<>();
 
-        for (Genre genre: genreList
-             ) {
+        for (Genre genre : genreList) {
             checkableGenreList.add(new CheckableGenre(genre));
         }
 
@@ -95,16 +82,15 @@ public class MovieListPresenter extends MvpPresenter<MovieListView> {
         content.add(new Header(App.getContext().getString(R.string.genres)));
         content.addAll(genres);
         content.add(new Header(App.getContext().getString(R.string.films)));
-        List<Movie> sortedMovies = movies;
-        if(sortedMovies.size() > 0) {
-            Collections.sort(sortedMovies, new Comparator<Movie>() {
+        if (!movies.isEmpty()) {
+            Collections.sort(movies, new Comparator<Movie>() {
                 @Override
                 public int compare(Movie movie, Movie t1) {
                     return movie.getLocalizedName().compareToIgnoreCase(t1.getLocalizedName());
                 }
             });
         }
-        content.addAll(sortedMovies);
+        content.addAll(movies);
 
         getViewState().showContent(content);
     }
@@ -113,42 +99,33 @@ public class MovieListPresenter extends MvpPresenter<MovieListView> {
 
         List<String> checkedGenres = new ArrayList<>();
 
-        for (CheckableGenre genre1: genres) {
-            if(genre1 == genre) {
+        for (CheckableGenre genre1 : genres) {
+            if (genre1 == genre) {
                 genre1.setChecked(!genre1.isChecked());
             }
-            if(genre1.isChecked() == true) {
+            if (genre1.isChecked()) {
                 checkedGenres.add(genre1.getItem().getName());
             }
         }
 
-
-
         List<Movie> filteredMovies = new ArrayList<>();
-        for (Movie movie : movies
-        ) {
+        for (Movie movie : movies) {
             List<String> movieGenres = movie.getGenres();
 
             if (movieGenres.containsAll(checkedGenres)) {
                 filteredMovies.add(movie);
             }
         }
-//        getViewState().setSelectedGenre(selectedGenre);
         prepareContent(genres, filteredMovies);
-    }
-
-    public void onMovieClick(View view, Movie movie) {
-
     }
 
     public void onTryAgainClick() {
         loadMovies();
     }
 
-
     private void onLoadApplicationsError(String error) {
         getViewState().setLoader(false);
         getViewState().setTryAgain(true);
-        getViewState().showErrorToast(App.getContext().getString(R.string.error_load));
+        getViewState().showErrorToast(error);
     }
 }

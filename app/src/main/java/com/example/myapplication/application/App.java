@@ -21,5 +21,4 @@ public class App extends Application {
         super.onCreate();
         context = this;
     }
-
 }
